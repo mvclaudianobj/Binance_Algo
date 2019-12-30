@@ -4,7 +4,7 @@ from API_Info import api_key
 
 
 def main():
-    binance = functions.Info(key=api_key.key, secret=api_key.secret)
+    binance = functions.Info(key=api_key.key, secret=api_key.secret, line_notify_token=api_key.line_notify_api_token)
     Order = binance.creatOrder("BTC/USDT")
     cancelOrder = binance.cancelOrder()
 
@@ -32,6 +32,9 @@ def main():
 
     # 使えるUSDTの残高を確認する (再定義した関数を使う場合)
     # print(binance.get_Margin_Balance())
+
+    # LINE Notify通知
+    # binance.line_notify("Hello, wolrd.")
 
 
 
