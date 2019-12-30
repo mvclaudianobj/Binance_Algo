@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import sys,os
+sys.path.append('./..')
+# sys.path.append('/home/ubuntu/Binance_Algo')
 import functions
 import time
 from API_Info import api_key
@@ -44,8 +47,14 @@ def main(param):
 
         print("======= {} =======".format("Loop Start"))
 
+        count_time = int(datetime.now().strftime('%s')) * 1000
+
         while True:
+            if int(datetime.now().strftime('%s')) * 1000 - count_time == 60000:
+                print("======= {} =======".format("Looping"))
+                count_time = int(datetime.now().strftime('%s')) * 1000
             if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
+                print("======= {} =======".format("5min"))
                 time.sleep(0.5)
                 if long_term_ma < short_term_ma:
                     short_term_ma = binance.moving_average(pair, period, short_term)
