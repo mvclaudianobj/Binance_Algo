@@ -13,7 +13,7 @@ class creatOrders:
         :return:
         """
         return self.binance_ccxt.create_order(symbol=self.symbol, type="LIMIT", side=side, amount=amount,
-                                                 price=price, params=params)
+                                              price=price, params=params)
 
     def market_order(self, side, amount, params={}):
         """
@@ -24,9 +24,9 @@ class creatOrders:
         :return:
         """
         return self.binance_ccxt.create_order(symbol=self.symbol, type="MARKET", side=side, amount=amount,
-                                                 params=params)
+                                              params=params)
 
-    def stop_limit_order(self, side, amount, price, triggerPrice):
+    def stop_limit_order(self, side, amount, price, triggerPrice, workingType=None):
         """
 
         :param side: "buy" or "sell", str
@@ -35,14 +35,19 @@ class creatOrders:
         :param triggerPrice: trigger price, float
         :return:
         """
-        return self.binance_ccxt.create_order(symbol=self.symbol, type="STOP", side=side, amount=amount,
-                                                 price=price, params={"stopPrice": triggerPrice})
+        if workingType == "MARK_PRICE":
+            return self.binance_ccxt.create_order(symbol=self.symbol, type="STOP", side=side, amount=amount,
+                                                  price=price, params={"stopPrice": triggerPrice,
+                                                                       "workingType": workingType})
+        else:
+            return self.binance_ccxt.create_order(symbol=self.symbol, type="STOP", side=side, amount=amount,
+                                                  price=price, params={"stopPrice": triggerPrice})
 
     # def take_profit_limit_order(self, side, amount, price, triggerPrice):
     #     return self.binance_ccxt.create_order(symbol=self.symbol, type="TAKE_PROFIT", side=side, amount=amount,
     #                                              price=price, params={"stopPrice": triggerPrice})
 
-    def stop_market_order(self, side, amount, triggerPrice):
+    def stop_market_order(self, side, amount, triggerPrice, workingType=None):
         """
 
         :param side: "buy" or "sell", str
@@ -50,10 +55,15 @@ class creatOrders:
         :param triggerPrice: trigger price, float
         :return:
         """
-        return self.binance_ccxt.create_order(symbol=self.symbol, type="STOP_MARKET", side=side, amount=amount,
-                                                 params={"stopPrice": triggerPrice})
+        if workingType == "MARK_PRICE":
+            return self.binance_ccxt.create_order(symbol=self.symbol, type="STOP_MARKET", side=side, amount=amount,
+                                                  params={"stopPrice": triggerPrice,
+                                                          "workingType": workingType})
+        else:
+            return self.binance_ccxt.create_order(symbol=self.symbol, type="STOP_MARKET", side=side, amount=amount,
+                                                  params={"stopPrice": triggerPrice})
 
-    def take_profit_market_order(self, side, amount, triggerPrice):
+    def take_profit_market_order(self, side, amount, triggerPrice, workingType=None):
         """
 
         :param side: "buy" or "sell", str
@@ -61,5 +71,10 @@ class creatOrders:
         :param triggerPrice: trigger price, float
         :return:
         """
-        return self.binance_ccxt.create_order(symbol=self.symbol, type="TAKE_PROFIT_MARKET", side=side,
-                                                 amount=amount, params={"stopPrice": triggerPrice})
+        if workingType == "MARK_PRICE":
+            return self.binance_ccxt.create_order(symbol=self.symbol, type="TAKE_PROFIT_MARKET", side=side,
+                                                  amount=amount, params={"stopPrice": triggerPrice,
+                                                                         "workingType": workingType})
+        else:
+            return self.binance_ccxt.create_order(symbol=self.symbol, type="TAKE_PROFIT_MARKET", side=side,
+                                                  amount=amount, params={"stopPrice": triggerPrice})
