@@ -983,7 +983,11 @@ class binance(Exchange):
         if uppercaseType == 'LIMIT':
             priceIsRequired = True
             timeInForceIsRequired = True
-        elif (uppercaseType == 'STOP_LOSS') or (uppercaseType == 'TAKE_PROFIT'):
+        elif (uppercaseType == 'STOP') or (uppercaseType == 'TAKE_PROFIT'):
+            stopPriceIsRequired = True
+            priceIsRequired = True
+            # timeInForceIsRequired = True
+        elif (uppercaseType == 'STOP_MARKET') or (uppercaseType == 'TAKE_PROFIT_MARKET'):
             stopPriceIsRequired = True
         elif (uppercaseType == 'STOP_LOSS_LIMIT') or (uppercaseType == 'TAKE_PROFIT_LIMIT'):
             stopPriceIsRequired = True
@@ -992,6 +996,9 @@ class binance(Exchange):
         elif uppercaseType == 'LIMIT_MAKER':
             priceIsRequired = True
         elif uppercaseType == 'STOP':
+            stopPriceIsRequired = True
+            priceIsRequired = True
+        elif uppercaseType == 'TAKE_PROFIT':
             stopPriceIsRequired = True
             priceIsRequired = True
         if priceIsRequired:
