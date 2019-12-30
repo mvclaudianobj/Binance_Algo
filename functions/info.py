@@ -24,3 +24,6 @@ class Info:
 
     def cancelOrder(self):
         return cancel_orders.cancelOrders(self.binance_ccxt)
+
+    def get_Margin_Balance(self):
+        return float(self.binance_ccxt.fetch_balance()["info"]["assets"][1]["marginBalance"])
