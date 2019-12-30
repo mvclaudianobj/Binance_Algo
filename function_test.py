@@ -1,4 +1,5 @@
 import functions
+import json
 from API_Info import api_key
 
 
@@ -26,7 +27,12 @@ def main():
     # print(cancelOrder.cancel_one_order("468168615", "BTC/USDT"))
     
     # ccxtのメソッドを使いたい場合のサンプル
-    print(binance.binance_ccxt)
+    # 使えるUSDTの残高を確認する (ccxtを使う場合)
+    print(binance.binance_ccxt.fetch_balance()["info"]["assets"][1]["marginBalance"])
+
+    # 使えるUSDTの残高を確認する (再定義した関数を使う場合)
+    print(binance.get_Margin_Balance())
+
 
 
 if __name__ == '__main__':
