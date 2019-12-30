@@ -7,7 +7,7 @@ class Info:
     def __init__(self, key, secret):
         self.key = key
         self.secret = secret
-        self.binance_futures = ccxt.binance({
+        self.binance_ccxt = ccxt.binance({
             'apiKey': self.key,
             'secret': self.secret,
             'enableRateLimit': True,
@@ -20,7 +20,7 @@ class Info:
         })
 
     def creatOrder(self, symbol):
-        return create_orders.creatOrders(self.binance_futures, symbol=symbol)
+        return create_orders.creatOrders(self.binance_ccxt, symbol=symbol)
 
     def cancelOrder(self):
-        return cancel_orders.cancelOrders(self.binance_futures)
+        return cancel_orders.cancelOrders(self.binance_ccxt)

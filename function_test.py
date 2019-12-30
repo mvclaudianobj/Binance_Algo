@@ -24,6 +24,9 @@ def main():
 
     # 一つの注文をキャンセルする
     # print(cancelOrder.cancel_one_order("468168615", "BTC/USDT"))
+    
+    # ccxtのメソッドを使いたい場合のサンプル
+    print(binance.binance_ccxt)
 
 
 if __name__ == '__main__':
