@@ -1,3 +1,4 @@
+# -- coding: utf-8 --
 class creatOrders:
     def __init__(self, binance_ccxt, symbol):
         self.symbol = symbol

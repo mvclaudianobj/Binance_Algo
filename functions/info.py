@@ -1,3 +1,4 @@
+# -- coding: utf-8 --
 from functions import create_orders
 from functions import cancel_orders
 import ccxt
