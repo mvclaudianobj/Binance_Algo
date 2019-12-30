@@ -24,10 +24,8 @@ class Info:
     def line_notify(self, message, pic=False, path=None):
         if self.line_notify_token != None:
             line_notify_api = 'https://notify-api.line.me/api/notify'
-            # message = message + "\n"
-            message = "{}\n".format(message)
+            message = "\n{}\n".format(message)
             payload = {'message': message}
-
             if pic == False:
                 headers = {'Authorization': 'Bearer ' + self.line_notify_token}
                 requests.post(line_notify_api, data=payload, headers=headers)
