@@ -21,7 +21,7 @@ def main():
     # print(Order.take_profit_market_order("sell", 0.01, 7800))
 
     # 逆指値成行注文
-    # print(Order.stop_market_order("sell", 0.01, 7000))
+    # print(Order.stop_market_order("sell", 0.01, 7000, workingType="MARK_PRICE"))
 
     # 一つの注文をキャンセルする
     # print(cancelOrder.cancel_one_order("468168615", "BTC/USDT"))
