@@ -28,10 +28,10 @@ def main():
     
     # ccxtのメソッドを使いたい場合のサンプル
     # 使えるUSDTの残高を確認する (ccxtを使う場合)
-    print(binance.binance_ccxt.fetch_balance()["info"]["assets"][1]["marginBalance"])
+    # print(binance.binance_ccxt.fetch_balance()["info"]["assets"][1]["marginBalance"])
 
     # 使えるUSDTの残高を確認する (再定義した関数を使う場合)
-    print(binance.get_Margin_Balance())
+    # print(binance.get_Margin_Balance())
 
 
 
