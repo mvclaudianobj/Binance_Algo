@@ -44,3 +44,18 @@ class Info:
 
     def get_Margin_Balance(self):
         return float(self.binance_ccxt.fetch_balance()["info"]["assets"][1]["marginBalance"])
+
+    def moving_average(self, symbol, period, ma_period, method="C"):
+        method_lst = ["O", "H", "L", "C"]
+        method_dict = {"O": 1, "H": 2, "L": 3, "C": 4}
+        if method not in method_lst:
+            print("INCORRECT METHOD!!!")
+            exit()
+
+        sum_price = 0
+        ohlcv_lst = self.binance_ccxt.fetch_ohlcv(symbol, timeframe=period, limit=ma_period + 1)
+
+        for i in range(len(ohlcv_lst) - 1):
+            sum_price += ohlcv_lst[i][method_dict[method]]
+
+        return round(sum_price / ma_period, 3)
