@@ -1,4 +1,4 @@
-# -- coding: utf-8 --
+# -*- coding: utf-8 -*-
 class cancelOrders:
     def __init__(self, binance_ccxt):
         self.binance_ccxt = binance_ccxt
