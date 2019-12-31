@@ -50,30 +50,7 @@ class Info:
     def fetch_orders(self, orderID, symbol):
         return self.binance_ccxt.fetch_order(id=orderID, symbol=symbol)
 
-    def judge_ma_slope(self, side, symbol, period, ma_period, method="C"):
-        method_lst = ["O", "H", "L", "C"]
-        method_dict = {"O": 1, "H": 2, "L": 3, "C": 4}
-        if method not in method_lst:
-            print("INCORRECT METHOD!!!")
-            exit()
-
-        ohlcv_lst = self.binance_ccxt.fetch_ohlcv(symbol, timeframe=period, limit=ma_period + 2)
-        if side == "sell":
-            if ohlcv_lst[0] > ohlcv_lst[len(ohlcv_lst) - 2]:
-                return {"slope": True,
-                        "var_slope": (ohlcv_lst[0][method_dict[method]] - ohlcv_lst[len(ohlcv_lst) - 2][
-                            method_dict[method]]) * 100 / ma_period}
-            else:
-                return {"slope": False}
-        else:
-            if ohlcv_lst[0] < ohlcv_lst[len(ohlcv_lst) - 2]:
-                return {"slope": True,
-                        "var_slope": (ohlcv_lst[len(ohlcv_lst) - 2][method_dict[method]] - ohlcv_lst[0][
-                            method_dict[method]]) * 100 / ma_period}
-            else:
-                return {"slope": False}
-
-    def moving_average(self, symbol, period, ma_period, method="C"):
+    def moving_average(self, symbol, period, ma_period, method="C", delta=0):
         method_lst = ["O", "H", "L", "C"]
         method_dict = {"O": 1, "H": 2, "L": 3, "C": 4}
         if method not in method_lst:
@@ -81,9 +58,9 @@ class Info:
             exit()
 
         sum_price = 0
-        ohlcv_lst = self.binance_ccxt.fetch_ohlcv(symbol, timeframe=period, limit=ma_period + 1)
+        ohlcv_lst = self.binance_ccxt.fetch_ohlcv(symbol, timeframe=period, limit=ma_period + 1 + delta)
 
-        for i in range(len(ohlcv_lst) - 1):
+        for i in range(len(ohlcv_lst) - (1 + delta)):
             sum_price += ohlcv_lst[i][method_dict[method]]
 
         return round(sum_price / ma_period, 3)
