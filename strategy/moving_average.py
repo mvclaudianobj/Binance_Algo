@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import sys,os
+import sys
+import os
+
 sys.path.append('./..')
-# sys.path.append('/home/ubuntu/Binance_Algo')
 import functions
 import time
 from API_Info import api_key
@@ -13,7 +14,8 @@ def main(param):
     global binance
     try:
         print("======= Strategy: Moving Average =======")
-        binance = functions.Info(key=api_key.key, secret=api_key.secret, line_notify_token=api_key.line_notify_api_token)
+        binance = functions.Info(key=api_key.key, secret=api_key.secret,
+                                 line_notify_token=api_key.line_notify_api_token)
         Order = binance.creatOrder("BTC/USDT")
 
         ######################################################################
@@ -41,6 +43,9 @@ def main(param):
         binance.line_notify(str(json.dumps(param, indent=4)))
         short_term_ma = binance.moving_average(pair, period, short_term)
         long_term_ma = binance.moving_average(pair, period, long_term)
+        print("======= {} =======".format("MA"))
+        print("short_term_ma: ", short_term_ma)
+        print("long_term_ma: ", long_term_ma)
 
         print("======= {} =======".format("Account Balance"))
         binance.line_notify(binance.get_Margin_Balance())
@@ -54,11 +59,17 @@ def main(param):
                 print("======= {} =======".format("Looping"))
                 count_time = int(datetime.now().strftime('%s')) * 1000
             if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
-                print("======= {} =======".format("5min"))
-                time.sleep(0.5)
+                print("======= {} =======".format(period))
+                time.sleep(5)
                 if long_term_ma < short_term_ma:
+                    print("======= {} =======".format("formar MA"))
+                    print("formar short_term_ma: ", short_term_ma)
+                    print("formar long_term_ma: ", long_term_ma)
                     short_term_ma = binance.moving_average(pair, period, short_term)
                     long_term_ma = binance.moving_average(pair, period, long_term)
+                    print("======= {} =======".format("MA"))
+                    print("short_term_ma: ", short_term_ma)
+                    print("long_term_ma: ", long_term_ma)
                     if long_term_ma <= short_term_ma:
                         pass
                     # Dead Cross
@@ -70,14 +81,17 @@ def main(param):
                             print("======= {} =======".format("New Stop Order"))
                             binance.line_notify(str(Order.stop_market_order("buy", lot,
                                                                             float(binance.fetch_orders(
-                                                                                new_sell_order["info"]["orderId"], pair)[
+                                                                                new_sell_order["info"]["orderId"],
+                                                                                pair)[
                                                                                       "info"][
-                                                                                      "avgPrice"]) + stop_loss)["info"]))
+                                                                                      "avgPrice"]) + stop_loss)[
+                                                        "info"]))
 
                             print("======= {} =======".format("New Stop Order"))
                             binance.line_notify(str(Order.take_profit_market_order("buy", lot,
                                                                                    float(binance.fetch_orders(
-                                                                                       new_sell_order["info"]["orderId"],
+                                                                                       new_sell_order["info"][
+                                                                                           "orderId"],
                                                                                        pair)["info"][
                                                                                              "avgPrice"]) - take_profit)[
                                                         "info"]))
@@ -85,8 +99,11 @@ def main(param):
                             judge_ma_period = param["judge_ma_period"]
                             slope = binance.judge_ma_slope("buy", pair, period, judge_ma_period)
                             while not slope["slope"]:
+                                if int(datetime.now().strftime('%s')) * 1000 - count_time == 60000:
+                                    print("======= {} =======".format("2nd. Looping"))
                                 if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
-                                    time.sleep(0.5)
+                                    print("======= {} =======".format("2nd. " + period))
+                                    time.sleep(5)
                                     slope = binance.judge_ma_slope("buy", pair, period, judge_ma_period)
                                     if slope["slope"] == True:
                                         if slope["var_slope"] * 100 / binance.moving_average(pair, period,
@@ -103,8 +120,14 @@ def main(param):
                                             pass
 
                 elif long_term_ma > short_term_ma:
+                    print("======= {} =======".format("formar MA"))
+                    print("formar short_term_ma: ", short_term_ma)
+                    print("formar long_term_ma: ", long_term_ma)
                     short_term_ma = binance.moving_average(pair, period, short_term)
                     long_term_ma = binance.moving_average(pair, period, long_term)
+                    print("======= {} =======".format("MA"))
+                    print("short_term_ma: ", short_term_ma)
+                    print("long_term_ma: ", long_term_ma)
                     if long_term_ma >= short_term_ma:
                         pass
                     # Gold Cross
@@ -118,7 +141,8 @@ def main(param):
                                                                             float(binance.fetch_orders(
                                                                                 new_buy_order["info"]["orderId"], pair)[
                                                                                       "info"][
-                                                                                      "avgPrice"]) - stop_loss)["info"]))
+                                                                                      "avgPrice"]) - stop_loss)[
+                                                        "info"]))
                             print("======= {} =======".format("New Stop Order"))
                             binance.line_notify(str(Order.take_profit_market_order("sell", lot,
                                                                                    float(binance.fetch_orders(
@@ -130,8 +154,11 @@ def main(param):
                             judge_ma_period = param["judge_ma_period"]
                             slope = binance.judge_ma_slope("sell", pair, period, judge_ma_period)
                             while not slope["slope"]:
+                                if int(datetime.now().strftime('%s')) * 1000 - count_time == 60000:
+                                    print("======= {} =======".format("2nd. Looping"))
                                 if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
-                                    time.sleep(0.5)
+                                    print("======= {} =======".format("2nd. " + period))
+                                    time.sleep(5)
                                     slope = binance.judge_ma_slope("sell", pair, period, judge_ma_period)
                                     if slope["slope"] == True:
                                         if slope["var_slope"] * 100 / binance.moving_average(pair, period,
@@ -151,17 +178,20 @@ def main(param):
 
 
 if __name__ == '__main__':
-    param = {
-        "pair": "BTC/USDT",
-        "lot": 0.1,
-        "long_term": 25,
-        "short_term": 10,
-        "order_close": "auto",  # 自動でオーダークローズ
-        # "order_close": {"stop_loss": 30, # 手動でオーダークローズ
-        #                 "take_profit": 60},
-        "judge_ma_period": 7,
-        "order_close_per": 0.02,
-        "period": "5m",
-    }
+    # param = {
+    #     "pair": "BTC/USDT",
+    #     "lot": 0.1,
+    #     "long_term": 25,
+    #     "short_term": 10,
+    #     "order_close": "auto",  # 自動でオーダークローズ
+    #     # "order_close": {"stop_loss": 30, # 手動でオーダークローズ
+    #     #                 "take_profit": 60},
+    #     "judge_ma_period": 7,
+    #     "order_close_per": 0.02,
+    #     "period": "5m",
+    # }
+
+    with open('./moving_average.json') as f:
+        param = json.load(f)
 
     main(param)

@@ -1,0 +1,10 @@
+{
+  "pair": "BTC/USDT",
+  "lot": 0.05,
+  "long_term": 10,
+  "short_term": 5,
+  "order_close": "auto",
+  "judge_ma_period": 7,
+  "order_close_per": 0.02,
+  "period": "1m"
+}
