@@ -52,12 +52,10 @@ def main(param):
 
         print("======= {} =======".format("Loop Start"))
 
-        count_time = int(datetime.now().strftime('%s')) * 1000
-
         while True:
-            if int(datetime.now().strftime('%s')) * 1000 - count_time == 60000:
+            if int(datetime.now().strftime('%s')) * 1000 % 60000 == 0:
                 print("======= {} =======".format("Looping"))
-            if int(datetime.now().strftime('%s')) * 1000 - count_time == 300000:
+            if int(datetime.now().strftime('%s')) * 1000 % 300000 == 0:
                 binance.line_notify("======= {} =======".format("Now in 1st. Loop"))
             if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
                 print("======= {} =======".format(period))
@@ -103,9 +101,9 @@ def main(param):
                             slope = after < before
                             count_time_2 = int(datetime.now().strftime('%s')) * 1000
                             while not slope:
-                                if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 60000:
+                                if int(datetime.now().strftime('%s')) * 1000 % 60000 == 0:
                                     print("======= {} =======".format("2nd. Looping"))
-                                if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 300000:
+                                if int(datetime.now().strftime('%s')) * 1000 % 300000 == 0:
                                     binance.line_notify("======= {} =======".format("Now in 2nd. Loop"))
                                 if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
                                     print("======= {} =======".format("2nd. " + period))
@@ -161,11 +159,10 @@ def main(param):
                             after = binance.moving_average(pair, period, judge_ma_period)
                             before = binance.moving_average(pair, period, judge_ma_period, delta=1)
                             slope = after > before
-                            count_time_2 = int(datetime.now().strftime('%s')) * 1000
                             while not slope:
-                                if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 60000:
+                                if int(datetime.now().strftime('%s')) * 1000 % 60000 == 0:
                                     print("======= {} =======".format("2nd. Looping"))
-                                if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 300000:
+                                if int(datetime.now().strftime('%s')) * 1000 % 300000 == 0:
                                     binance.line_notify("======= {} =======".format("Now in 2nd. Loop"))
                                 if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
                                     print("======= {} =======".format("2nd. " + period))
@@ -184,7 +181,6 @@ def main(param):
                                             break
                                         else:
                                             pass
-            count_time = int(datetime.now().strftime('%s')) * 1000
 
     except Exception as e:
         binance.line_notify("ERROR: \n" + str(e))
