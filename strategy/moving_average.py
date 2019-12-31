@@ -112,16 +112,14 @@ def main(param):
                                     before = binance.moving_average(pair, period, judge_ma_period, delta=1)
                                     slope = after > before
                                     if slope:
-                                        if ((before - after) * 100 / before) > param["order_close_per"]:
-                                            print("======= {} =======".format("New Close Buy Order"))
-                                            close_buy_order = Order.market_order("buy", lot)
-                                            binance.line_notify(str(close_buy_order["info"]))
+                                        # if ((before - after) * 100 / before) > param["order_close_per"]:
+                                        print("======= {} =======".format("New Close Buy Order"))
+                                        close_buy_order = Order.market_order("buy", lot)
+                                        binance.line_notify(str(close_buy_order["info"]))
 
-                                            print("======= {} =======".format("Account Balance"))
-                                            binance.line_notify(binance.get_Margin_Balance())
-                                            break
-                                        # else:
-                                        #     pass
+                                        print("======= {} =======".format("Account Balance"))
+                                        binance.line_notify(binance.get_Margin_Balance())
+                                        break
 
                 elif long_term_ma > short_term_ma:
                     print("======= {} =======".format("formar MA"))
@@ -171,16 +169,14 @@ def main(param):
                                     before = binance.moving_average(pair, period, judge_ma_period, delta=1)
                                     slope = after < before
                                     if slope:
-                                        if ((after - before) * 100 / before) > param["order_close_per"]:
-                                            print("======= {} =======".format("New Close Sell Order"))
-                                            close_sell_order = Order.market_order("sell", lot)
-                                            binance.line_notify(str(close_sell_order["info"]))
+                                        # if ((after - before) * 100 / before) > param["order_close_per"]:
+                                        print("======= {} =======".format("New Close Sell Order"))
+                                        close_sell_order = Order.market_order("sell", lot)
+                                        binance.line_notify(str(close_sell_order["info"]))
 
-                                            print("======= {} =======".format("Account Balance"))
-                                            binance.line_notify(binance.get_Margin_Balance())
-                                            break
-                                        # else:
-                                        #     pass
+                                        print("======= {} =======".format("Account Balance"))
+                                        binance.line_notify(binance.get_Margin_Balance())
+                                        break
 
     except Exception as e:
         binance.line_notify("ERROR: \n" + str(e))
