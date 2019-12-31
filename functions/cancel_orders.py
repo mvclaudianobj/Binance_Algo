@@ -11,9 +11,3 @@ class cancelOrders:
         :return:
         """
         return self.binance_ccxt.cancel_order(id=orderId, symbol=symbol)
-
-    # def cancel_all_orders(self, symbol):
-    #     return self.binance_ccxt.cancel_order(symbol=symbol)
-    #
-    # def cancel_some_orders(self, orderIds, symbol):
-    #     return self.binance_ccxt.cancel_order(id=orderIds, symbol=symbol)

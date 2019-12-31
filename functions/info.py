@@ -64,7 +64,3 @@ class Info:
             sum_price += ohlcv_lst[i][method_dict[method]]
 
         return round(sum_price / ma_period, 3)
-
-    # def last_updated_time(self, symbol, period, ma_period):
-    #     ohlcv_lst = self.binance_ccxt.fetch_ohlcv(symbol, timeframe=period, limit=ma_period + 1)
-    #     return ohlcv_lst[len(ohlcv_lst) - 1][0]

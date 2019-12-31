@@ -44,9 +44,6 @@ class creatOrders:
             return self.binance_ccxt.create_order(symbol=self.symbol, type="STOP", side=side, amount=amount,
                                                   price=price, params={"stopPrice": triggerPrice})
 
-    # def take_profit_limit_order(self, side, amount, price, triggerPrice):
-    #     return self.binance_ccxt.create_order(symbol=self.symbol, type="TAKE_PROFIT", side=side, amount=amount,
-    #                                              price=price, params={"stopPrice": triggerPrice})
 
     def stop_market_order(self, side, amount, triggerPrice, workingType=None):
         """
