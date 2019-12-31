@@ -1,3 +1,4 @@
+# -- coding: utf-8 --
 import functions
 import json
 from API_Info import api_key
