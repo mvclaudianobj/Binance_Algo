@@ -113,7 +113,7 @@ def main(param):
                                     slope = after < before
                                     if slope:
                                         if ((before - after) * 100 / before) > param["order_close_per"]:
-                                            print("======= {} =======".format("New Buy Order"))
+                                            print("======= {} =======".format("New Close Buy Order"))
                                             close_buy_order = Order.market_order("buy", lot)
                                             binance.line_notify(str(close_buy_order["info"]))
 
@@ -172,7 +172,7 @@ def main(param):
                                     slope = after > before
                                     if slope:
                                         if ((after - before) * 100 / before) > param["order_close_per"]:
-                                            print("======= {} =======".format("New Sell Order"))
+                                            print("======= {} =======".format("New Close Sell Order"))
                                             close_sell_order = Order.market_order("sell", lot)
                                             binance.line_notify(str(close_sell_order["info"]))
 
