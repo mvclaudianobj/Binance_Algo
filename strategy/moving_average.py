@@ -57,7 +57,8 @@ def main(param):
         while True:
             if int(datetime.now().strftime('%s')) * 1000 - count_time == 60000:
                 print("======= {} =======".format("Looping"))
-                count_time = int(datetime.now().strftime('%s')) * 1000
+            if int(datetime.now().strftime('%s')) * 1000 - count_time == 300000:
+                binance.line_notify("======= {} =======".format("Now in 1st. Loop"))
             if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
                 print("======= {} =======".format(period))
                 time.sleep(5)
@@ -97,22 +98,26 @@ def main(param):
                                                         "info"]))
                         else:
                             judge_ma_period = param["judge_ma_period"]
-                            slope = binance.judge_ma_slope("buy", pair, period, judge_ma_period)
+                            after = binance.moving_average(pair, period, judge_ma_period)
+                            before = binance.moving_average(pair, period, judge_ma_period, delta=1)
+                            slope = after < before
                             count_time_2 = int(datetime.now().strftime('%s')) * 1000
-                            while not slope["slope"]:
+                            while not slope:
                                 if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 60000:
                                     print("======= {} =======".format("2nd. Looping"))
+                                if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 300000:
+                                    binance.line_notify("======= {} =======".format("Now in 2nd. Loop"))
                                 if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
                                     print("======= {} =======".format("2nd. " + period))
                                     time.sleep(5)
-                                    slope = binance.judge_ma_slope("buy", pair, period, judge_ma_period)
-                                    if slope["slope"] == True:
-                                        if slope["var_slope"] * 100 / binance.moving_average(pair, period,
-                                                                                             judge_ma_period) >= param[
-                                            "order_close_per"]:
+                                    after = binance.moving_average(pair, period, judge_ma_period)
+                                    before = binance.moving_average(pair, period, judge_ma_period, delta=1)
+                                    slope = after < before
+                                    if slope:
+                                        if ((before - after) * 100 / before) > param["order_close_per"]:
                                             print("======= {} =======".format("New Buy Order"))
-                                            close_sell_order = Order.market_order("buy", lot)
-                                            binance.line_notify(str(close_sell_order["info"]))
+                                            close_buy_order = Order.market_order("buy", lot)
+                                            binance.line_notify(str(close_buy_order["info"]))
 
                                             print("======= {} =======".format("Account Balance"))
                                             binance.line_notify(binance.get_Margin_Balance())
@@ -153,28 +158,34 @@ def main(param):
                                                         "info"]))
                         else:
                             judge_ma_period = param["judge_ma_period"]
-                            slope = binance.judge_ma_slope("sell", pair, period, judge_ma_period)
+                            after = binance.moving_average(pair, period, judge_ma_period)
+                            before = binance.moving_average(pair, period, judge_ma_period, delta=1)
+                            slope = after > before
                             count_time_2 = int(datetime.now().strftime('%s')) * 1000
-                            while not slope["slope"]:
+                            while not slope:
                                 if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 60000:
                                     print("======= {} =======".format("2nd. Looping"))
+                                if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 300000:
+                                    binance.line_notify("======= {} =======".format("Now in 2nd. Loop"))
                                 if int(datetime.now().strftime('%s')) * 1000 % period_dict[period] == 0:
                                     print("======= {} =======".format("2nd. " + period))
                                     time.sleep(5)
-                                    slope = binance.judge_ma_slope("sell", pair, period, judge_ma_period)
-                                    if slope["slope"] == True:
-                                        if slope["var_slope"] * 100 / binance.moving_average(pair, period,
-                                                                                             judge_ma_period) >= param[
-                                            "order_close_per"]:
+                                    after = binance.moving_average(pair, period, judge_ma_period)
+                                    before = binance.moving_average(pair, period, judge_ma_period, delta=1)
+                                    slope = after > before
+                                    if slope:
+                                        if ((after - before) * 100 / before) > param["order_close_per"]:
                                             print("======= {} =======".format("New Sell Order"))
-                                            close_buy_order = Order.market_order("sell", lot)
-                                            binance.line_notify(str(close_buy_order["info"]))
+                                            close_sell_order = Order.market_order("sell", lot)
+                                            binance.line_notify(str(close_sell_order["info"]))
 
                                             print("======= {} =======".format("Account Balance"))
                                             binance.line_notify(binance.get_Margin_Balance())
                                             break
                                         else:
                                             pass
+            count_time = int(datetime.now().strftime('%s')) * 1000
+
     except Exception as e:
         binance.line_notify("ERROR: \n" + str(e))
 
