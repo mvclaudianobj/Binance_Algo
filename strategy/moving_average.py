@@ -120,8 +120,8 @@ def main(param):
                                             print("======= {} =======".format("Account Balance"))
                                             binance.line_notify(binance.get_Margin_Balance())
                                             break
-                                        else:
-                                            pass
+                                        # else:
+                                        #     pass
 
                 elif long_term_ma > short_term_ma:
                     print("======= {} =======".format("formar MA"))
@@ -179,8 +179,8 @@ def main(param):
                                             print("======= {} =======".format("Account Balance"))
                                             binance.line_notify(binance.get_Margin_Balance())
                                             break
-                                        else:
-                                            pass
+                                        # else:
+                                        #     pass
 
     except Exception as e:
         binance.line_notify("ERROR: \n" + str(e))
