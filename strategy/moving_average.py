@@ -110,7 +110,7 @@ def main(param):
                                     time.sleep(5)
                                     after = binance.moving_average(pair, period, judge_ma_period)
                                     before = binance.moving_average(pair, period, judge_ma_period, delta=1)
-                                    slope = after < before
+                                    slope = after > before
                                     if slope:
                                         if ((before - after) * 100 / before) > param["order_close_per"]:
                                             print("======= {} =======".format("New Close Buy Order"))
@@ -169,7 +169,7 @@ def main(param):
                                     time.sleep(5)
                                     after = binance.moving_average(pair, period, judge_ma_period)
                                     before = binance.moving_average(pair, period, judge_ma_period, delta=1)
-                                    slope = after > before
+                                    slope = after < before
                                     if slope:
                                         if ((after - before) * 100 / before) > param["order_close_per"]:
                                             print("======= {} =======".format("New Close Sell Order"))
