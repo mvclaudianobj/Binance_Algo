@@ -1,0 +1,18 @@
+======= Strategy: Moving Average =======
+======= Param =======
+{
+    "pair": "BTC/USDT",
+    "lot": 0.05,
+    "long_term": 10,
+    "short_term": 5,
+    "order_close": "auto",
+    "judge_ma_period": 7,
+    "order_close_per": 0.02,
+    "period": "1m"
+}
+======= MA =======
+short_term_ma:  7169.47
+long_term_ma:  7162.954
+======= Account Balance =======
+3851.60168769
+======= Loop Start =======
