@@ -69,10 +69,8 @@ def main(param):
                     print("======= {} =======".format("MA"))
                     print("short_term_ma: ", short_term_ma)
                     print("long_term_ma: ", long_term_ma)
-                    if long_term_ma <= short_term_ma:
-                        pass
                     # Dead Cross
-                    else:
+                    if long_term_ma > short_term_ma:
                         print("======= {} =======".format("New Sell Order"))
                         new_sell_order = Order.market_order("sell", lot)
                         binance.line_notify(str(new_sell_order["info"]))
@@ -112,7 +110,6 @@ def main(param):
                                     before = binance.moving_average(pair, period, judge_ma_period, delta=1)
                                     slope = after > before
                                     if slope:
-                                        # if ((before - after) * 100 / before) > param["order_close_per"]:
                                         print("======= {} =======".format("New Close Buy Order"))
                                         close_buy_order = Order.market_order("buy", lot)
                                         binance.line_notify(str(close_buy_order["info"]))
@@ -130,10 +127,8 @@ def main(param):
                     print("======= {} =======".format("MA"))
                     print("short_term_ma: ", short_term_ma)
                     print("long_term_ma: ", long_term_ma)
-                    if long_term_ma >= short_term_ma:
-                        pass
                     # Gold Cross
-                    else:
+                    if long_term_ma < short_term_ma:
                         print("======= {} =======".format("New Buy Order"))
                         new_buy_order = Order.market_order("buy", lot)
                         binance.line_notify(str(new_buy_order["info"]))
@@ -169,7 +164,6 @@ def main(param):
                                     before = binance.moving_average(pair, period, judge_ma_period, delta=1)
                                     slope = after < before
                                     if slope:
-                                        # if ((after - before) * 100 / before) > param["order_close_per"]:
                                         print("======= {} =======".format("New Close Sell Order"))
                                         close_sell_order = Order.market_order("sell", lot)
                                         binance.line_notify(str(close_sell_order["info"]))
