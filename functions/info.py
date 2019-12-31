@@ -61,13 +61,15 @@ class Info:
         if side == "sell":
             if ohlcv_lst[0] > ohlcv_lst[len(ohlcv_lst) - 2]:
                 return {"slope": True,
-                        "var_slope": (ohlcv_lst[0] - ohlcv_lst[len(ohlcv_lst) - 2][method_dict[method]]) / ma_period}
+                        "var_slope": (ohlcv_lst[0][method_dict[method]] - ohlcv_lst[len(ohlcv_lst) - 2][
+                            method_dict[method]]) * 100 / ma_period}
             else:
                 return {"slope": False}
         else:
             if ohlcv_lst[0] < ohlcv_lst[len(ohlcv_lst) - 2]:
                 return {"slope": True,
-                        "var_slope": (ohlcv_lst[len(ohlcv_lst) - 2][method_dict[method]] - ohlcv_lst[0]) / ma_period}
+                        "var_slope": (ohlcv_lst[len(ohlcv_lst) - 2][method_dict[method]] - ohlcv_lst[0][
+                            method_dict[method]]) * 100 / ma_period}
             else:
                 return {"slope": False}
 
