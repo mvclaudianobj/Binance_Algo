@@ -98,7 +98,6 @@ def main(param):
                         else:
                             judge_ma_period = param["judge_ma_period"]
                             slope = binance.judge_ma_slope("buy", pair, period, judge_ma_period)
-                            binance.line_notify("======= {} =======".format("2nd. Loop start"))
                             count_time_2 = int(datetime.now().strftime('%s')) * 1000
                             while not slope["slope"]:
                                 if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 60000:
@@ -155,7 +154,6 @@ def main(param):
                         else:
                             judge_ma_period = param["judge_ma_period"]
                             slope = binance.judge_ma_slope("sell", pair, period, judge_ma_period)
-                            binance.line_notify("======= {} =======".format("2nd. Loop start"))
                             count_time_2 = int(datetime.now().strftime('%s')) * 1000
                             while not slope["slope"]:
                                 if int(datetime.now().strftime('%s')) * 1000 - count_time_2 == 60000:
