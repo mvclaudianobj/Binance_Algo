@@ -98,8 +98,8 @@ def main(param):
                             judge_ma_period = param["judge_ma_period"]
                             after = binance.moving_average(pair, period, judge_ma_period)
                             before = binance.moving_average(pair, period, judge_ma_period, delta=1)
-                            slope = after < before
-                            count_time_2 = int(datetime.now().strftime('%s')) * 1000
+                            slope = after > before
+                            print("======= {} =======".format("2nd. Loop Started"))
                             while not slope:
                                 if int(datetime.now().strftime('%s')) * 1000 % 60000 == 0:
                                     print("======= {} =======".format("2nd. Looping"))
@@ -158,7 +158,7 @@ def main(param):
                             judge_ma_period = param["judge_ma_period"]
                             after = binance.moving_average(pair, period, judge_ma_period)
                             before = binance.moving_average(pair, period, judge_ma_period, delta=1)
-                            slope = after > before
+                            slope = after < before
                             while not slope:
                                 if int(datetime.now().strftime('%s')) * 1000 % 60000 == 0:
                                     print("======= {} =======".format("2nd. Looping"))
