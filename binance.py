@@ -215,9 +215,6 @@ class binance(Exchange):
                         'openInterest',
                         'leverageBracket',
                     ],
-                    # 'put': ['listenKey'],
-                    # 'post': ['listenKey'],
-                    # 'delete': ['listenKey'],
                 },
                 'fapiPrivate': {
                     'get': [
@@ -236,7 +233,6 @@ class binance(Exchange):
                         'positionMargin',
                         'marginType',
                         'order',
-                        'leverage',
                         'leverage',
                         'listenKey',
                     ],
@@ -332,18 +328,15 @@ class binance(Exchange):
                 'Rest API trading is not enabled.': ExchangeNotAvailable,
                 "You don't have permission.": PermissionDenied,  # {"msg":"You don't have permission.","success":false}
                 'Market is closed.': ExchangeNotAvailable,  # {"code":-1013,"msg":"Market is closed."}
-                '-1000': ExchangeNotAvailable,
-                # {"code":-1000,"msg":"An unknown error occured while processing the request."}
-                '-1003': RateLimitExceeded,
-                # {"code":-1003,"msg":"Too much request weight used, current limit is 1200 request weight per 1 MINUTE. Please use the websocket for live updates to avoid polling the API."}
+                '-1000': ExchangeNotAvailable,  # {"code":-1000,"msg":"An unknown error occured while processing the request."}
+                '-1003': RateLimitExceeded,  # {"code":-1003,"msg":"Too much request weight used, current limit is 1200 request weight per 1 MINUTE. Please use the websocket for live updates to avoid polling the API."}
                 '-1013': InvalidOrder,  # createOrder -> 'invalid quantity'/'invalid price'/MIN_NOTIONAL
                 '-1021': InvalidNonce,  # 'your time is ahead of server'
                 '-1022': AuthenticationError,  # {"code":-1022,"msg":"Signature for self request is not valid."}
                 '-1100': InvalidOrder,  # createOrder(symbol, 1, asdf) -> 'Illegal characters found in parameter 'price'
                 '-1104': ExchangeError,  # Not all sent parameters were read, read 8 parameters but was sent 9
                 '-1128': ExchangeError,  # {"code":-1128,"msg":"Combination of optional parameters invalid."}
-                '-2010': ExchangeError,
-                # generic error code for createOrder -> 'Account has insufficient balance for requested action.', {"code":-2010,"msg":"Rest API trading is not enabled."}, etc...
+                '-2010': ExchangeError,  # generic error code for createOrder -> 'Account has insufficient balance for requested action.', {"code":-2010,"msg":"Rest API trading is not enabled."}, etc...
                 '-2011': OrderNotFound,  # cancelOrder(1, 'BTC/USDT') -> 'UNKNOWN_ORDER'
                 '-2013': OrderNotFound,  # fetchOrder(1, 'BTC/USDT') -> 'Order does not exist'
                 '-2014': AuthenticationError,  # {"code":-2014, "msg": "API-key format invalid."}
@@ -650,8 +643,7 @@ class binance(Exchange):
             'symbol': market['id'],
         }
         if limit is not None:
-            request[
-                'limit'] = limit  # default 100, max 5000, see https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#order-book
+            request['limit'] = limit  # default 100, max 5000, see https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#order-book
         method = 'publicGetDepth' if market['spot'] else 'fapiPublicGetDepth'
         response = getattr(self, method)(self.extend(request, params))
         orderbook = self.parse_order_book(response)
@@ -1141,13 +1133,11 @@ class binance(Exchange):
                 raise InvalidOrder(self.id + ' createOrder method requires a price argument for a ' + type + ' order')
             request['price'] = self.price_to_precision(symbol, price)
         if timeInForceIsRequired:
-            request['timeInForce'] = self.options[
-                'defaultTimeInForce']  # 'GTC' = Good To Cancel(default), 'IOC' = Immediate Or Cancel
+            request['timeInForce'] = self.options['defaultTimeInForce']  # 'GTC' = Good To Cancel(default), 'IOC' = Immediate Or Cancel
         if stopPriceIsRequired:
             stopPrice = self.safe_float(params, 'stopPrice')
             if stopPrice is None:
-                raise InvalidOrder(
-                    self.id + ' createOrder method requires a stopPrice extra param for a ' + type + ' order')
+                raise InvalidOrder(self.id + ' createOrder method requires a stopPrice extra param for a ' + type + ' order')
             else:
                 params = self.omit(params, 'stopPrice')
                 request['stopPrice'] = self.price_to_precision(symbol, stopPrice)
@@ -1244,9 +1234,7 @@ class binance(Exchange):
             symbols = self.symbols
             numSymbols = len(symbols)
             fetchOpenOrdersRateLimit = int(numSymbols / 2)
-            raise ExchangeError(
-                self.id + ' fetchOpenOrders WARNING: fetching open orders without specifying a symbol is rate-limited to one call per ' + str(
-                    fetchOpenOrdersRateLimit) + ' seconds. Do not call self method frequently to avoid ban. Set ' + self.id + '.options["warnOnFetchOpenOrdersWithoutSymbol"] = False to suppress self warning message.')
+            raise ExchangeError(self.id + ' fetchOpenOrders WARNING: fetching open orders without specifying a symbol is rate-limited to one call per ' + str(fetchOpenOrdersRateLimit) + ' seconds. Do not call self method frequently to avoid ban. Set ' + self.id + '.options["warnOnFetchOpenOrdersWithoutSymbol"] = False to suppress self warning message.')
         else:
             defaultType = self.safe_string_2(self.options, 'fetchOpenOrders', 'defaultType', 'spot')
             type = self.safe_string(params, 'type', defaultType)
@@ -1587,8 +1575,7 @@ class binance(Exchange):
         response = self.wapiGetDepositAddress(self.extend(request, params))
         success = self.safe_value(response, 'success')
         if (success is None) or not success:
-            raise InvalidAddress(
-                self.id + ' fetchDepositAddress returned an empty response – create the deposit address in the user settings first.')
+            raise InvalidAddress(self.id + ' fetchDepositAddress returned an empty response – create the deposit address in the user settings first.')
         address = self.safe_string(response, 'address')
         tag = self.safe_string(response, 'addressTag')
         self.check_address(address)
@@ -1656,6 +1643,7 @@ class binance(Exchange):
             'info': response,
             'id': self.safe_string(response, 'id'),
         }
+
     def parse_trading_fee(self, fee, market=None):
         #
         #     {
@@ -1722,7 +1710,6 @@ class binance(Exchange):
             result[symbol] = fee
         return result
 
-
     def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
         url = self.urls['api'][api]
         url += '/' + path
@@ -1746,8 +1733,7 @@ class binance(Exchange):
                 }
             else:
                 raise AuthenticationError(self.id + ' userDataStream endpoint requires `apiKey` credential')
-        if (api == 'private') or (api == 'sapi') or (api == 'wapi' and path != 'systemStatus') or (
-                api == 'fapiPrivate'):
+        if (api == 'private') or (api == 'sapi') or (api == 'wapi' and path != 'systemStatus') or (api == 'fapiPrivate'):
             self.check_required_credentials()
             query = None
             if (api == 'sapi') and (path == 'asset/dust'):
@@ -1791,8 +1777,7 @@ class binance(Exchange):
             if body.find('LOT_SIZE') >= 0:
                 raise InvalidOrder(self.id + ' order amount should be evenly divisible by lot size ' + body)
             if body.find('PRICE_FILTER') >= 0:
-                raise InvalidOrder(
-                    self.id + ' order price is invalid, i.e. exceeds allowed price precision, exceeds min price or max price limits or is invalid float value in general, use self.price_to_precision(symbol, amount) ' + body)
+                raise InvalidOrder(self.id + ' order price is invalid, i.e. exceeds allowed price precision, exceeds min price or max price limits or is invalid float value in general, use self.price_to_precision(symbol, amount) ' + body)
         if len(body) > 0:
             if body[0] == '{':
                 # check success value for wapi endpoints
