@@ -1,31 +1,32 @@
 # -- coding: utf-8 --
 import functions
 import json
-from API_Info import api_key
+import API_Info
 
 
 def main():
+    api_key = API_Info.api_key()
     binance = functions.Info(key=api_key.key, secret=api_key.secret, line_notify_token=api_key.line_notify_api_token)
     Order = binance.creatOrder("BTC/USDT")
     cancelOrder = binance.cancelOrder()
 
     # 指し値注文
-    # print(Order.limit_order(amount=0.01, side="BUY", price=7100))
+    # print(Order.limit_order(amount=0.001, side="BUY", price=6500))
 
     # 成行注文
-    # print(Order.market_order("BUY", 0.01))
+    # print(Order.market_order(side="SELL", amount=0.001))
 
     # 逆指値注文
-    # print(Order.stop_limit_order("buy", 0.01, 7601, 7600))
+    # print(Order.stop_limit_order(side="buy", amount=0.001, price=7601, triggerPrice=7600))
 
     # 利益確定成行注文
-    # print(Order.take_profit_market_order("sell", 0.01, 7800))
+    # print(Order.take_profit_market_order(side="buy", amount=0.01, triggerPrice=6300))
 
     # 逆指値成行注文
-    # print(Order.stop_market_order("sell", 0.01, 7000, workingType="MARK_PRICE"))
+    # print(Order.stop_market_order(side="buy", amount=0.001, triggerPrice=6000, workingType="MARK_PRICE"))
 
     # 一つの注文をキャンセルする
-    # print(cancelOrder.cancel_one_order("468168615", "BTC/USDT"))
+    # print(cancelOrder.cancel_one_order(orderId="2631948567", symbol="BTC/USDT"))
     
     # ccxtのメソッドを使いたい場合のサンプル
     # 使えるUSDTの残高を確認する (ccxtを使う場合)
